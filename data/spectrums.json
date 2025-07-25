@@ -1,0 +1,15 @@
+{
+  "spectrums": [
+    { "start": "Hot", "end": "Cold" },
+    { "start": "Safe", "end": "Dangerous" },
+    { "start": "Easy", "end": "Hard" },
+    { "start": "Cheap", "end": "Expensive" },
+    { "start": "Realistic", "end": "Absurd" },
+    { "start": "Boring", "end": "Exciting" },
+    { "start": "Light", "end": "Heavy" },
+    { "start": "Soft", "end": "Loud" },
+    { "start": "Simple", "end": "Complex" },
+    { "start": "Modern", "end": "Ancient" }
+  ]
+}
+
