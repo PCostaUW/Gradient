@@ -1,4 +1,4 @@
-import { db, ref, set, onValue, update } from './firebase-config.js';
+import { db, ref, push, set, onValue, update } from './firebase-config.js';
 
 let currentRoomId = null;
 let currentPlayerName = null;
@@ -163,5 +163,35 @@ function startNextRound(nextRoundNum) {
   });
 }
 
+export function addCustomSpectrum() {
+    const start = document.getElementById('custom-start').value.trim();
+    const end = document.getElementById('custom-end').value.trim();
+  
+    if (!start || !end) {
+      alert("Please enter both start and end of the spectrum");
+      return;
+    }
+  
+    if (!currentRoomId) {
+      alert("You must join a room first");
+      return;
+    }
+  
+    // Reference to the spectrums list in the current room
+    const spectraRef = ref(db, `rooms/${currentRoomId}/spectrums`);
+  
+    // Push the new spectrum object (creates unique key automatically)
+    push(spectraRef, { start, end })
+      .then(() => {
+        alert("Spectrum added successfully!");
+        document.getElementById('custom-start').value = '';
+        document.getElementById('custom-end').value = '';
+      })
+      .catch(error => {
+        alert("Failed to add spectrum: " + error.message);
+      });
+  }
+  
 window.createOrJoinRoom = createOrJoinRoom;
 window.submitGuess = submitGuess;
+window.addCustomSpectrum = addCustomSpectrum;
