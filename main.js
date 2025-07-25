@@ -1,4 +1,9 @@
-import { db, ref, push, set, onValue, update } from './firebase-config.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { firebaseConfig } from './firebase-config.js';
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 let currentRoomId = null;
 let currentPlayerName = null;
@@ -192,6 +197,29 @@ export function addCustomSpectrum() {
       });
   }
   
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#room-section button').forEach(btn => {
+      btn.addEventListener('click', createOrJoinRoom);
+    });
+  
+    const submitGuessBtn = document.querySelector('#game-section button');
+    if (submitGuessBtn) {
+      submitGuessBtn.addEventListener('click', submitGuess);
+    }
+  
+    const addSpectrumBtn = document.querySelector('#custom-spectrum-form button');
+    if (addSpectrumBtn) {
+      addSpectrumBtn.addEventListener('click', addCustomSpectrum);
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('join-room')?.addEventListener('click', createOrJoinRoom);
+    document.getElementById('submit-guess')?.addEventListener('click', submitGuess);
+    document.getElementById('add-spectrum')?.addEventListener('click', addCustomSpectrum);
+  });
+
+
 window.createOrJoinRoom = createOrJoinRoom;
 window.submitGuess = submitGuess;
 window.addCustomSpectrum = addCustomSpectrum;
