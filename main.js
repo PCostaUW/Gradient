@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getDatabase, ref, push, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { firebaseConfig } from './firebase-config.js';
 
+// Initialize Firebase app and database
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -168,58 +169,37 @@ function startNextRound(nextRoundNum) {
   });
 }
 
+// Add custom spectrum entered by the user
 export function addCustomSpectrum() {
-    const start = document.getElementById('custom-start').value.trim();
-    const end = document.getElementById('custom-end').value.trim();
-  
-    if (!start || !end) {
-      alert("Please enter both start and end of the spectrum");
-      return;
-    }
-  
-    if (!currentRoomId) {
-      alert("You must join a room first");
-      return;
-    }
-  
-    // Reference to the spectrums list in the current room
-    const spectraRef = ref(db, `rooms/${currentRoomId}/spectrums`);
-  
-    // Push the new spectrum object (creates unique key automatically)
-    push(spectraRef, { start, end })
-      .then(() => {
-        alert("Spectrum added successfully!");
-        document.getElementById('custom-start').value = '';
-        document.getElementById('custom-end').value = '';
-      })
-      .catch(error => {
-        alert("Failed to add spectrum: " + error.message);
-      });
+  const start = document.getElementById('custom-start').value.trim();
+  const end = document.getElementById('custom-end').value.trim();
+
+  if (!start || !end) {
+    alert("Please enter both start and end of the spectrum");
+    return;
   }
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#room-section button').forEach(btn => {
-      btn.addEventListener('click', createOrJoinRoom);
+
+  if (!currentRoomId) {
+    alert("You must join a room first");
+    return;
+  }
+
+  const spectraRef = ref(db, `rooms/${currentRoomId}/spectrums`);
+
+  push(spectraRef, { start, end })
+    .then(() => {
+      alert("Spectrum added successfully!");
+      document.getElementById('custom-start').value = '';
+      document.getElementById('custom-end').value = '';
+    })
+    .catch(error => {
+      alert("Failed to add spectrum: " + error.message);
     });
-  
-    const submitGuessBtn = document.querySelector('#game-section button');
-    if (submitGuessBtn) {
-      submitGuessBtn.addEventListener('click', submitGuess);
-    }
-  
-    const addSpectrumBtn = document.querySelector('#custom-spectrum-form button');
-    if (addSpectrumBtn) {
-      addSpectrumBtn.addEventListener('click', addCustomSpectrum);
-    }
-  });
+}
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('join-room')?.addEventListener('click', createOrJoinRoom);
-    document.getElementById('submit-guess')?.addEventListener('click', submitGuess);
-    document.getElementById('add-spectrum')?.addEventListener('click', addCustomSpectrum);
-  });
-
-
-window.createOrJoinRoom = createOrJoinRoom;
-window.submitGuess = submitGuess;
-window.addCustomSpectrum = addCustomSpectrum;
+// Attach event listeners after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('join-room')?.addEventListener('click', createOrJoinRoom);
+  document.getElementById('submit-guess')?.addEventListener('click', submitGuess);
+  document.getElementById('add-spectrum')?.addEventListener('click', addCustomSpectrum);
+});
